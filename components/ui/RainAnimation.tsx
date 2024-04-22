@@ -1,5 +1,3 @@
-// src/components/ui/RainAnimation.tsx
-
 import React from 'react';
 import RainDrop from './RainDrop';
 
