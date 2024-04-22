@@ -25,7 +25,7 @@ export default function LoginPage() {
     },
   ];
   return (
-    <div className="flex flex-col items-center justify-center h-[40rem]  ">
+    <div className="flex flex-col items-center justify-center h-[49rem]  ">
       <RainAnimation/>
       <Input type="password" placeholder="Password"></Input>
       <TypewriterEffectSmooth words={words} />
