@@ -5,9 +5,9 @@ const RainAnimation: React.FC = () => {
     const numberOfDrops = 100;
     const generateRaindrops = () => {
         return Array.from({ length: numberOfDrops }).map((_, index) => {
-            const duration = Math.random() * 2 + 1; // Raindrops fall at different speeds
-            const delay = Math.random() * -20; // Raindrops start at different times
-            const leftPosition = Math.random() * 100; // Random horizontal start position
+            const duration = Math.random() * 2 + 1; 
+            const delay = Math.random() * -20; 
+            const leftPosition = Math.random() * 100; 
 
             return (
                 <RainDrop

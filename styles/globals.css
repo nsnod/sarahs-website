@@ -3,27 +3,37 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 8, 0, 48;
-  --background-start-rgb: 8, 0, 48;
-  --background-end-rgb: 8, 0, 48;
+  --foreground-rgb: 8, 0, 48;  
+  --background-start-rgb: 8, 0, 48; 
+  --background-end-rgb: 8, 0, 48; 
+}
+
+body {
+  min-height: 100vh; /* Ensures the body takes at least the full height of the viewport */
+  margin: 0; /* Removes default margin */
+  background: linear-gradient(
+    to bottom,
+    rgb(5, 0, 30) 0%,    /* Starts from the very top */
+    rgb(10, 0, 50) 70%,  /* Transition starts at 70% of the height */
+    rgb(50, 40, 90) 100% /* Ends at the very bottom */
+  );
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 8, 0, 48;
-    --background-start-rgb: 8, 0, 48;
-    --background-end-rgb: 8, 0, 48;
+    --foreground-rgb: 255, 255, 255;  
+    --background-start-rgb: 5, 0, 30;  
+    --background-end-rgb: 50, 40, 90;  
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  body {
+    background: linear-gradient(
       to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-start-rgb)), 
+      rgb(10, 0, 50) 70%,               
+      rgb(var(--background-end-rgb)) 100% 
+    );
+  }
 }
 
 @layer utilities {
@@ -40,12 +50,12 @@ body {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: -1; /* Adjust z-index as needed to ensure it's in the background */
+  z-index: -1;
 }
 
 .raindrop {
   position: absolute;
-  bottom: 100%; /* Start from above the view */
+  bottom: 100%;
   width: 2px;
   height: 15px;
   background-color: rgba(156, 202, 255, 0.6);
@@ -56,7 +66,6 @@ body {
 
 @keyframes fall {
   to {
-      transform: translateY(100vh); /* Move the drop to the bottom of the viewport */
+      transform: translateY(100vh);
   }
 }
-

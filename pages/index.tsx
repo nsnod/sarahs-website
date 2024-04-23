@@ -8,24 +8,34 @@ import RainAnimation from '../components/ui/RainAnimation';
 export default function LoginPage() {
   const words = [
     {
-      text: "This",
+      text: "Welcome",
     },
     {
-      text: "is",
+      text: "to",
     },
     {
-      text: "a",
+      text: "your",
     },
     {
-      text: "login",
+      text: "website!",
     },
     {
-      text: "page",
-      className: "text-green-500 dark:text-green-500",
+      text: "<3",
+      className: "text-[#9ccaff] dark:text-[#9ccaff]",
+    },
+    {
+      text: "Enter the",
+    },
+    {
+      text: "secret password!",
+    },
+    {
+      text: ":D",
+      className: "text-[#9ccaff] dark:text-[#9ccaff]",
     },
   ];
   return (
-    <div className="flex flex-col items-center justify-center h-[49rem]  ">
+    <div className="flex flex-col items-center justify-center h-[70rem]  ">
       <RainAnimation/>
       <Input type="password" placeholder="Password"></Input>
       <TypewriterEffectSmooth words={words} />
