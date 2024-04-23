@@ -8,16 +8,7 @@ import RainAnimation from '../components/ui/RainAnimation';
 export default function LoginPage() {
   const words = [
     {
-      text: "Welcome",
-    },
-    {
-      text: "to",
-    },
-    {
-      text: "your",
-    },
-    {
-      text: "website!",
+      text: "Welcome!",
     },
     {
       text: "<3",
