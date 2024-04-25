@@ -121,3 +121,22 @@ body {
   transform: rotate(-45deg);  
   transform-origin: left;  
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;  
+  width: 100vw; 
+  padding-top: 3vw;  
+  position: relative; 
+  overflow: hidden;  
+}
+
+.totoro-img {
+  max-width: 100%;  
+  height: auto;  
+  position: relative; 
+  z-index: 10;  
+}
