@@ -28,6 +28,7 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center h-[70rem]  ">
       <RainAnimation/>
+      <img src={"/images/gifs/three_totoros.gif"} alt="description" />
       <Input type="password" placeholder="Password"></Input>
       <TypewriterEffectSmooth words={words} />
     </div>
