@@ -115,8 +115,8 @@ body {
   position: absolute;
   top: 0;  
   left: 0;  
-  width: 300px; 
-  height: 2px;
+  width: 400px; 
+  height: 3px;
   background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);  
   transform: rotate(-45deg);  
   transform-origin: left;  
