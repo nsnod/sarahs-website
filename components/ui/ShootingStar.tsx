@@ -22,16 +22,6 @@ const ShootingStar = () => {
         return () => clearInterval(interval);
     }, []);
 
-
-    // lol i give up im just perma hiding the scrollbar while the stars are shooting
-    useEffect(() => {
-        if (visible) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    }, [visible]);
-
     return visible ? <div className="shooting-star" style={style}></div> : null;
 };
 

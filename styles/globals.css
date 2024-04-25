@@ -133,18 +133,3 @@ body {
   position: relative;
   overflow: hidden;
 }
-
-@media (min-width: 1300px) {
-  /* For larger screens */
-  .container {
-    padding-top: 30vh; 
-  }
-}
-
-.totoro-img {
-  max-width: 100%;
-  height: auto;
-  position: relative;
-  z-index: 10;
-}
-
