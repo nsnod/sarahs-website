@@ -8,8 +8,8 @@ const ShootingStar = () => {
         const shootStar = () => {
             setVisible(true);
             setStyle({
-                top: `${Math.random() * 5}%`,  
-                left: `${75 + Math.random() * 25}%`  
+                top: `${Math.random() * 5}vh`,
+                left: `${75 + Math.random() * 25}vw`
             });
 
             setTimeout(() => {
@@ -17,10 +17,20 @@ const ShootingStar = () => {
             }, 2500);  
         };
 
-        const interval = setInterval(shootStar, 10000); 
+        const interval = setInterval(shootStar, 10000);
 
         return () => clearInterval(interval);
     }, []);
+
+
+    // lol i give up im just perma hiding the scrollbar while the stars are shooting
+    useEffect(() => {
+        if (visible) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }, [visible]);
 
     return visible ? <div className="shooting-star" style={style}></div> : null;
 };
