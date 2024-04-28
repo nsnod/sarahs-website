@@ -14,7 +14,7 @@ const ShootingStar = () => {
 
             setTimeout(() => {
                 setVisible(false);
-            }, 2500);  
+            }, 4000);  
         };
 
         const interval = setInterval(shootStar, 10000);

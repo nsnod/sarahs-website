@@ -1,19 +1,15 @@
 "use client";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import { Inter } from "next/font/google";
 import { Input } from "../components/ui/input"
-import React from 'react';
 import RainAnimation from '../components/ui/RainAnimation';
 
 export default function LoginPage() {
   const words = [
-    {
-      text: "Welcome!",
-    },
-    {
-      text: "<3",
-      className: "text-[#9ccaff] dark:text-[#9ccaff]",
-    },
+    { text: "Welcome!", },
+    { text: "<3", className: "text-[#9ccaff] dark:text-[#9ccaff]", },
     {
       text: "Enter the",
     },

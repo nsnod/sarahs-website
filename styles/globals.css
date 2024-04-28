@@ -2,15 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%; 
+  min-height: 100vh; 
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 body {
-  min-height: 100vh; /* Ensures the body takes at least the full height of the viewport */
-  margin: 0; /* Removes default margin */
   background: linear-gradient(
     to bottom,
-    rgb(5, 0, 30) 0%,    /* Starts with a dark blue at the top */
-    rgb(50, 40, 90) 100%  /* Transitions to a lighter blue at the bottom */
+    rgb(5, 0, 30) 0%, 
+    rgb(50, 40, 90) 100% 
   );
-  background-attachment: fixed; /* Optional: Makes the background fixed during scrolling */
+  background-attachment: fixed;
+  background-size: cover; 
 }
 
 @media (prefers-color-scheme: dark) {
@@ -90,17 +97,17 @@ body {
 
 @keyframes shoot {
   0% {
-      opacity: 1;
-      transform: translateX(0) translateY(0);
+    opacity: 1;
+    transform: translateX(0) translateY(0);
   }
   100% {
-      opacity: 0;
-      transform: translateX(-800px) translateY(800px); 
+    opacity: 0;
+    transform: translateX(-800px) translateY(800px);
   }
 }
 
 .shooting-star {
-  position: absolute;
+  position: fixed;
   width: 2px;
   height: 2px;
   background-color: white;
@@ -108,28 +115,44 @@ body {
   box-shadow: 0 0 8px 2px white;
   animation: shoot 2.5s ease-out forwards;
   will-change: transform, opacity;
+  z-index: 10;  
 }
 
 .shooting-star::after {
   content: '';
   position: absolute;
-  top: 0;  
+  top: -1.5px;  
   left: 0;  
   width: 400px; 
   height: 3px;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);  
-  transform: rotate(-45deg);  
-  transform-origin: left;  
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);
+  transform: rotate(-45deg);
+  transform-origin: left;
+  z-index: 9;  
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  padding-top: -4vw; 
-  position: relative;
-  overflow: hidden;
+.moon {
+  width: 100px; 
+  height: 100px;
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 16px 0 0 0 rgba(255, 255, 255, 0.8) inset; 
+  top: 10%;  
+  left: 10%;
+  animation: hoverFigure8 10s infinite linear
+}
+
+@keyframes hoverFigure8 {
+  0%, 100% {
+      transform: translate(0, 0);
+  }
+  25% {
+      transform: translate(10px, -10px);
+  }
+  50% {
+      transform: translate(20px, 0);
+  }
+  75% {
+      transform: translate(10px, 10px);
+  }
 }
