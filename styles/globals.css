@@ -173,3 +173,32 @@ body {
 .hidden {
   opacity: 0;  
 }
+
+/* Add a base font size that is relatively comfortable for reading on most devices */
+.typewriter-text {
+  font-size: 16px; /* This can be adjusted based on your design needs */
+}
+
+@media (min-width: 640px) { /* Corresponds to Tailwind's 'sm' breakpoint */
+  .typewriter-text {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 768px) { /* 'md' */
+  .typewriter-text {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 1024px) { /* 'lg' */
+  .typewriter-text {
+    font-size: 32px;
+  }
+}
+
+@media (min-width: 1280px) { /* 'xl' */
+  .typewriter-text {
+    font-size: 40px;
+  }
+}

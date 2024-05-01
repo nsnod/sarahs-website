@@ -51,7 +51,7 @@ export default function LoginPage({ isAuthenticated }: LoginPageProps) {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-[70rem]">
+    <div className="flex flex-col items-center justify-center h-[48rem]">
       <RainAnimation />
       <img src={"/images/gifs/three_totoros.gif"} alt="Three Totoros" />
       <Input 
