@@ -20,7 +20,7 @@ export default function handler(
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'development',  
         path: '/',
-        maxAge: 30 // 2 days
+        maxAge: 30 // 30 seconds
       }));
       res.status(200).json({ success: true });
     } else {
