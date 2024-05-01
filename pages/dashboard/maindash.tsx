@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import TwinklingStars from '../../components/ui/TwinklingStars';
 import ShootingStar from '../../components/ui/ShootingStar';
 import Moon from '../../components/ui/moon';
+import ToDoList from '../../components/ui/todolist';
 
 export default function Home() {
   return (
@@ -12,6 +13,9 @@ export default function Home() {
       <ShootingStar />
       <div className="flex flex-col items-center justify-center h-[50rem] pt-50 relative" style={{ zIndex: 999 }}>
         <img src="/images/main_totoro/totoro_main_image.png" alt="Totoro" className="totoro-img" />
+      </div>
+      <div style={{ zIndex: 1000 }}>
+        <ToDoList/>
       </div>
     </div>
   );

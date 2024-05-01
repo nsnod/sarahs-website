@@ -174,12 +174,11 @@ body {
   opacity: 0;  
 }
 
-/* Add a base font size that is relatively comfortable for reading on most devices */
 .typewriter-text {
-  font-size: 16px; /* This can be adjusted based on your design needs */
+  font-size: 16px; 
 }
 
-@media (min-width: 640px) { /* Corresponds to Tailwind's 'sm' breakpoint */
+@media (min-width: 640px) { 
   .typewriter-text {
     font-size: 20px;
   }
@@ -201,4 +200,9 @@ body {
   .typewriter-text {
     font-size: 40px;
   }
+}
+
+.flex-wrap {
+  position: relative; 
+  z-index: 1000; 
 }
