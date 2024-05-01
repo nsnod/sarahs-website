@@ -1,8 +1,8 @@
 import React from 'react';
+import { GetServerSideProps } from 'next';
 import TwinklingStars from '../../components/ui/TwinklingStars';
 import ShootingStar from '../../components/ui/ShootingStar';
 import Moon from '../../components/ui/moon';
-import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -16,3 +16,24 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+  const { auth } = req.cookies;  
+
+  // check if cookie
+  if (!auth || auth !== 'true') {
+    // no cookie redirect to index
+    return {
+      redirect: {
+        destination: '/', 
+        permanent: false,
+      },
+    };
+  }
+
+  // If authenticated, continue to render the Home page
+  return {
+    props: {},  // You can pass props to your page component here
+  };
+};
