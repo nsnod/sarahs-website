@@ -9,10 +9,10 @@ export default function Loading() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push('/dashboard/maindash');
-    }, 1000000);
+    }, 3000);
 
     const dotTimer = setInterval(() => {
-      setDotCount((prevCount) => (prevCount + 1) % 5); // Cycles through 0 to 4
+      setDotCount((prevCount) => (prevCount + 1) % 5); // cycles through 0 to 4
     }, 200);
 
     return () => {
