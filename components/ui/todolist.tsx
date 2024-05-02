@@ -19,7 +19,7 @@ const ToDoList: React.FC = () => {
   );
 
   const addTodo = (dayIndex: number): void => {
-    const newTodo: Todo = { id: Date.now(), text: 'New Todo...', completed: false };
+    const newTodo: Todo = { id: Date.now(), text: '', completed: false };
     const updatedWeekTodos = weekTodos.map((item, index) =>
       index === dayIndex ? { ...item, todos: [...item.todos, newTodo] } : item
     );
@@ -39,40 +39,40 @@ const ToDoList: React.FC = () => {
     setWeekTodos(updatedWeekTodos);
   };
 
-  const toggleTodo = (dayIndex: number, todoId: number): void => {
-    const updatedWeekTodos = weekTodos.map((item, index) => {
-      if (index === dayIndex) {
-        const updatedTodos = item.todos.map(todo =>
-          todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
-        );
-        return { ...item, todos: updatedTodos };
-      }
-      return item;
-    });
-    setWeekTodos(updatedWeekTodos);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, dayIndex: number, todoId: number): void => {
+    if ((e.key === 'Backspace' || e.key === 'Delete') && e.currentTarget.textContent === '') {
+      const updatedWeekTodos = weekTodos.map((item, index) => {
+        if (index === dayIndex) {
+          const filteredTodos = item.todos.filter(todo => todo.id !== todoId);
+          return { ...item, todos: filteredTodos };
+        }
+        return item;
+      });
+      setWeekTodos(updatedWeekTodos);
+    }
   };
 
   return (
     <div className="flex flex-wrap justify-center">
       {weekTodos.map((dayItem, index) => (
-        <div key={dayItem.day} 
-            className="p-4 m-2 border rounded-lg shadow-lg bg-opacity-90 bg-gradient-to-br from-blue-900 to-gray-800 backdrop-blur-md w-full md:w-1/2 lg:w-1/3 xl:w-1/4 min-w-[300px] max-w-[500px]"
-            style={{ zIndex: 1000 }}>
+        <div key={dayItem.day} className="p-4 m-2 border rounded-lg shadow-lg bg-opacity-90 bg-gradient-to-br from-blue-900 to-gray-800 backdrop-blur-md w-full md:w-1/2 lg:w-1/3 xl:w-1/4 min-w-[300px] max-w-[500px]" style={{ zIndex: 1000 }}>
           <h3 className="font-bold text-lg text-blue-200 mb-2">{dayItem.day}</h3>
           <div>
             {dayItem.todos.map(todo => (
-              <div key={todo.id} className="flex items-center my-1">
+              <div key={todo.id} className="flex items-start my-1">
                 <input
                   type="checkbox"
                   checked={todo.completed}
                   onChange={() => toggleTodo(index, todo.id)}
-                  className="mr-2 h-5 w-5 accent-blue-400"
+                  className="mr-2 h-5 w-5 accent-blue-400 mt-1"
                 />
-                <input
-                  type="text"
-                  value={todo.text}
-                  onChange={(e) => updateTodo(index, todo.id, e.target.value)}
-                  className="flex-1 p-1 border-b-2 border-gray-700 focus:outline-none focus:border-blue-400 text-blue-300 bg-transparent"
+                <div
+                  contentEditable={true}
+                  suppressContentEditableWarning={true}
+                  onBlur={(e) => updateTodo(index, todo.id, e.currentTarget.textContent || '')}
+                  onKeyDown={(e) => handleKeyDown(e, index, todo.id)}
+                  className="flex-1 min-h-[32px] outline-none bg-transparent text-blue-300"
+                  style={{ marginLeft: '24px', overflow: 'auto', whiteSpace: 'pre-wrap', border: 'none' }}
                 />
               </div>
             ))}
@@ -88,7 +88,6 @@ const ToDoList: React.FC = () => {
       ))}
     </div>
   );
-  
 };
 
 export default ToDoList;
