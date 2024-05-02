@@ -74,7 +74,7 @@ body {
 }
 
 .twinkling-stars {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -82,10 +82,11 @@ body {
   overflow: hidden;
   z-index: 10;  
   background: transparent;
+  z-index: 1;
 }
 
 .star {
-  position: absolute;
+  position: fixed;
   bottom: 50%;
   width: 3px;
   height: 3px;
@@ -93,6 +94,7 @@ body {
   box-shadow: 0 0 5px rgba(255, 255, 255, 1);
   border-radius: 50%;
   animation: twinkle 0.5s infinite ease-in-out;
+  z-index: 1;
 }
 
 @keyframes shoot {
@@ -120,7 +122,7 @@ body {
 
 .shooting-star::after {
   content: '';
-  position: absolute;
+  position: fixed;
   top: -1.5px;  
   left: 0;  
   width: 400px; 
@@ -134,12 +136,13 @@ body {
 .moon {
   width: 100px; 
   height: 100px;
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
   box-shadow: 16px 0 0 0 rgba(255, 255, 255, 0.8) inset; 
   top: 10%;  
   left: 10%;
-  animation: hoverFigure8 10s infinite linear
+  animation: hoverFigure8 10s infinite linear;
+  z-index: 998;
 }
 
 @keyframes hoverFigure8 {

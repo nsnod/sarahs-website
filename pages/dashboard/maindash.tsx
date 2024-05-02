@@ -7,14 +7,14 @@ import ToDoList from '../../components/ui/todolist';
 
 export default function Home() {
   return (
-    <div>
+    <div className="relative">
       <Moon />
       <TwinklingStars numberOfStars={200} />
       <ShootingStar />
-      <div className="flex flex-col items-center justify-center h-[50rem] pt-50 relative" style={{ zIndex: 999 }}>
-        <img src="/images/main_totoro/totoro_main_image.png" alt="Totoro" className="totoro-img" />
+      <div className="flex flex-col items-center justify-center">
+        <img src="/images/main_totoro/totoro_main_image.png" alt="Totoro" className="totoro-img mb-5" style={{ zIndex: 1001 }} />
       </div>
-      <div style={{ zIndex: 1000 }}>
+      <div className="mt-5 md:mt-10" style={{ zIndex: 1000 }}>
         <ToDoList/>
       </div>
     </div>
@@ -23,11 +23,9 @@ export default function Home() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
-  const { auth } = req.cookies;  
+  const { auth } = req.cookies;
 
-  // check if cookie
   if (!auth || auth !== 'true') {
-    // no cookie redirect to index
     return {
       redirect: {
         destination: '/', 
@@ -36,8 +34,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  // If authenticated, continue to render the Home page
-  return {
-    props: {},  // You can pass props to your page component here
-  };
+  return { props: {} };
 };

@@ -56,8 +56,8 @@ const ToDoList: React.FC = () => {
     <div className="flex flex-wrap justify-center">
       {weekTodos.map((dayItem, index) => (
         <div key={dayItem.day} 
-             className="p-4 m-2 border rounded-lg shadow-lg bg-opacity-90 bg-gradient-to-br from-blue-900 to-gray-800 backdrop-blur-md"
-             style={{ zIndex: 1000 }}>
+            className="p-4 m-2 border rounded-lg shadow-lg bg-opacity-90 bg-gradient-to-br from-blue-900 to-gray-800 backdrop-blur-md w-full md:w-1/2 lg:w-1/3 xl:w-1/4 min-w-[300px] max-w-[500px]"
+            style={{ zIndex: 1000 }}>
           <h3 className="font-bold text-lg text-blue-200 mb-2">{dayItem.day}</h3>
           <div>
             {dayItem.todos.map(todo => (
