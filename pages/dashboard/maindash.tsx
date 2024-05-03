@@ -12,7 +12,8 @@ export default function Home() {
       <TwinklingStars numberOfStars={200} />
       <ShootingStar />
       <div className="flex flex-col items-center justify-center">
-        <img src="/images/main_totoro/totoro_main_image.png" alt="Totoro" className="totoro-img mb-5" style={{ zIndex: 1001 }} />
+        <img src="/images/main_totoro/totoro_main_image.png" alt="Totoro" className="totoro-img" 
+             style={{ zIndex: 1001, transform: 'translateY(-15%)' }} />
       </div>
       <div className="mt-5 md:mt-10" style={{ zIndex: 1000 }}>
         <ToDoList/>
@@ -20,6 +21,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
