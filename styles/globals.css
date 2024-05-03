@@ -209,3 +209,20 @@ body {
   position: relative; 
   z-index: 1000; 
 }
+
+.editable-div {
+  display: flex;
+  align-items: center; /* Ensures vertical center alignment */
+  line-height: 48px; /* Slightly less than min-height to pull text into center */
+  min-height: 50px; /* Matches the height to ensure proper spacing */
+  padding: 0 10px; /* Horizontal padding, no vertical padding */
+  overflow: auto;
+  white-space: pre-wrap;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #bddbff; /* Example color: light blue, adjust as needed */
+  margin-left: 2px;
+  vertical-align: bottom; /* Helps align the text vertically */
+  transform: translateY(2px)
+}
