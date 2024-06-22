@@ -1,6 +1,5 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 // Initialize Firebase with your Firebase project config
 const firebaseConfig = {
@@ -9,25 +8,16 @@ const firebaseConfig = {
   projectId: 'PROJECTID',
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-const db = firebase.firestore();
-
-export interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-}
-
-export async function fetchTodos(): Promise<Todo[]> {
-  const todosSnapshot = await db.collection('todos').get();
-  const todos: Todo[] = [];
+export async function fetchTodos() {
+  const todosSnapshot = await getDocs(collection(db, 'todos'));
+  const todos = [];
   todosSnapshot.forEach((doc) => {
     todos.push({
       id: doc.id,
-      ...doc.data() as Todo,
+      ...doc.data(),
     });
   });
   return todos;
