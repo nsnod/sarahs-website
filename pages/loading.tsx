@@ -1,43 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import RainAnimation from '../components/ui/RainAnimation';
+// pages/page.tsx
+import { GetServerSideProps } from 'next';
+import { supabase } from '../supabase'; // Ensure your Supabase client is correctly imported
 
-export default function Loading() {
-  const router = useRouter();
-  const [dotCount, setDotCount] = useState(0);
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('/dashboard/maindash');
-    }, 2500);
+interface TodoPageProps {
+  todos: Todo[];
+}
 
-    const dotTimer = setInterval(() => {
-      setDotCount((prevCount) => (prevCount + 1) % 5); // cycles through 0 to 4
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
-      clearInterval(dotTimer);
-    };
-  }, [router]);
-
-  const dots = (
-    <span className="dots-container">
-      {Array.from({ length: 4 }, (_, i) => (
-        <span key={i} className={`dot ${i < dotCount ? 'visible' : 'hidden'}`}>.</span>
-      ))}
-    </span>
-  );
-
+export default function TodoPage({ todos }: TodoPageProps) {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <RainAnimation />
-      <div className="text-center">
-        <img src={"/images/gifs/haku.gif"} alt="Hovering dragon" style={{ width: '200px', height: 'auto', margin: '0 auto' }} />
-        <h1 className="text-4xl font-bold text-white mt-4">
-          Booting up your dashboard now{dots}
-        </h1>
-      </div>
+    <div>
+      <h1>Todo List</h1>
+      <ul>
+        {todos.map((todo: Todo) => (
+          <li key={todo.id}>
+            {todo.text} - {todo.completed ? 'Completed' : 'Not Completed'}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
+
+// Server-side function to fetch todos from Supabase
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data: todos, error } = await supabase
+    .from('todos') // Table name in Supabase
+    .select('*');  // Fetch all columns
+
+  if (error) {
+    console.error('Error fetching todos:', error);
+    return { props: { todos: [] } }; // In case of error, return an empty array
+  }
+
+  return {
+    props: {
+      todos, // Pass the fetched todos to the component
+    },
+  };
+};
