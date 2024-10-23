@@ -1,5 +1,5 @@
-import { GetServerSideProps } from 'next';
-import { supabase } from '../supabase'; 
+// pages/page.tsx (or app/page.tsx if you're in the app directory)
+import { supabase } from '../supabase'; // Make sure this file is where you initialized Supabase client
 
 interface Todo {
   id: string;
@@ -7,16 +7,22 @@ interface Todo {
   completed: boolean;
 }
 
-interface TodoPageProps {
-  todos: Todo[];
-}
+export default async function TodoPage() {
+  // Fetch data directly in the component using async/await
+  const { data: todos, error } = await supabase
+    .from('todos') // Table name in Supabase
+    .select('*');  // Fetch all columns
 
-export default function TodoPage({ todos }: TodoPageProps) {
+  if (error) {
+    console.error('Error fetching todos:', error);
+    return <div>Error loading todos</div>;
+  }
+
   return (
     <div>
       <h1>Todo List</h1>
       <ul>
-        {todos.map(todo => (
+        {todos.map((todo: Todo) => (
           <li key={todo.id}>
             {todo.text} - {todo.completed ? 'Completed' : 'Not Completed'}
           </li>
@@ -25,20 +31,3 @@ export default function TodoPage({ todos }: TodoPageProps) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data: todos, error } = await supabase
-    .from('todos')
-    .select('*');
-
-  if (error) {
-    console.error('Error fetching todos:', error);
-    return { props: { todos: [] } }; 
-  }
-
-  return {
-    props: {
-      todos, 
-    },
-  };
-};
