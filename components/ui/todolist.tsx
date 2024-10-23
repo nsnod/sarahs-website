@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { supabase } from '../../supabase'; 
 
 interface Todo {
   id: number;
   text: string;
   completed: boolean;
+  day: string;
 }
 
 interface DayTodos {
@@ -20,23 +22,62 @@ const ToDoList: React.FC = () => {
 
   const todoRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  const addTodo = (dayIndex: number, todoIndex: number): void => {
-    const newTodo: Todo = { id: Date.now(), text: '', completed: false };
-    const updatedWeekTodos = weekTodos.map((dayItem, index) => {
-        if (index === dayIndex) {
-            const newTodos = [...dayItem.todos];
-            newTodos.splice(todoIndex + 1, 0, newTodo); // Inserts new todo after the current todo
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const { data, error } = await supabase
+        .from('todos')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching todos:', error);
+      } else {
+        const todosByDay = daysOfWeek.map(day => ({
+          day,
+          todos: data.filter((todo: Todo) => todo.day === day),
+        }));
+        setWeekTodos(todosByDay);
+      }
+    };
+
+    fetchTodos();
+  }, []);
+
+  const addTodo = async (dayIndex: number): Promise<void> => {
+    try {
+      const response = await fetch('/api/add-todo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: '', day: daysOfWeek[dayIndex] }),
+      });
+  
+      const insertedTodo = await response.json();
+  
+      if (response.ok) {
+        const newTodo: Todo = { id: insertedTodo.id, text: '', completed: false, day: daysOfWeek[dayIndex] };
+  
+        const updatedWeekTodos = weekTodos.map((dayItem, index) => {
+          if (index === dayIndex) {
+            const newTodos = [...dayItem.todos, newTodo];
             return { ...dayItem, todos: newTodos };
-        }
-        return dayItem;
-    });
-    setWeekTodos(updatedWeekTodos);
-    setTimeout(() => {
-        todoRefs.current[newTodo.id]?.focus(); // Focus on the new todo
-    }, 0);
+          }
+          return dayItem;
+        });
+        setWeekTodos(updatedWeekTodos);
+  
+        setTimeout(() => {
+          todoRefs.current[newTodo.id]?.focus();
+        }, 0);
+      } else {
+        console.error('Error inserting todo:', insertedTodo);
+      }
+    } catch (error) {
+      console.error('Error inserting new todo:', error);
+    }
   };
 
-  const updateTodo = (dayIndex: number, todoId: number, newText: string): void => {
+  const updateTodo = async (dayIndex: number, todoId: number, newText: string): Promise<void> => {
     const updatedWeekTodos = weekTodos.map((item, index) => {
       if (index === dayIndex) {
         const updatedTodos = item.todos.map(todo =>
@@ -47,44 +88,58 @@ const ToDoList: React.FC = () => {
       return item;
     });
     setWeekTodos(updatedWeekTodos);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, dayIndex: number, todoId: number): void => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const currentTodoIndex = weekTodos[dayIndex].todos.findIndex(todo => todo.id === todoId);
-        addTodo(dayIndex, currentTodoIndex); // Pass the current todo index
-    } else if ((e.key === 'Backspace' || e.key === 'Delete') && e.currentTarget.textContent === '') {
-        e.preventDefault(); 
-        const updatedWeekTodos = weekTodos.map((item, index) => {
-            if (index === dayIndex) {
-                const pos = item.todos.findIndex(todo => todo.id === todoId);
-                const filteredTodos = item.todos.filter(todo => todo.id !== todoId);
-                setTimeout(() => {
-                    if (pos > 0 && todoRefs.current[item.todos[pos - 1].id]) {
-                        const previousTodoElement = todoRefs.current[item.todos[pos - 1].id];
-                        if (previousTodoElement) {
-                            previousTodoElement.focus();
-                            const range = document.createRange();
-                            const sel = window.getSelection();
-                            if (sel) {
-                                range.selectNodeContents(previousTodoElement);
-                                range.collapse(false);
-                                sel.removeAllRanges();
-                                sel.addRange(range);
-                            }
-                        }
-                    }
-                }, 0);
-                return { ...item, todos: filteredTodos };
-            }
-            return item;
-        });
-        setWeekTodos(updatedWeekTodos);
+  
+    try {
+      const response = await fetch('/api/update-todo', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: todoId, text: newText }),
+      });
+  
+      const updatedTodo = await response.json();
+  
+      if (!response.ok) {
+        console.error('Error updating todo:', updatedTodo);
+      }
+    } catch (error) {
+      console.error('Error updating todo:', error);
     }
   };
 
-  const toggleTodo = (dayIndex: number, todoId: number): void => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLDivElement>, dayIndex: number, todoId: number): Promise<void> => {
+    if ((e.key === 'Backspace' || e.key === 'Delete') && e.currentTarget.textContent === '') {
+      e.preventDefault();
+      const updatedWeekTodos = weekTodos.map((item, index) => {
+        if (index === dayIndex) {
+          const filteredTodos = item.todos.filter(todo => todo.id !== todoId);
+          return { ...item, todos: filteredTodos };
+        }
+        return item;
+      });
+      setWeekTodos(updatedWeekTodos);
+  
+      try {
+        const response = await fetch('/api/delete-todo', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: todoId }),
+        });
+  
+        if (!response.ok) {
+          const result = await response.json();
+          console.error('Error deleting todo:', result.error);
+        }
+      } catch (error) {
+        console.error('Delete request failed:', error);
+      }
+    }
+  };
+
+  const toggleTodo = async (dayIndex: number, todoId: number): Promise<void> => {
     const updatedWeekTodos = weekTodos.map((dayItem, index) => {
       if (index === dayIndex) {
         const updatedTodos = dayItem.todos.map(todo => {
@@ -98,6 +153,30 @@ const ToDoList: React.FC = () => {
       return dayItem;
     });
     setWeekTodos(updatedWeekTodos);
+  
+    const currentTodo = weekTodos[dayIndex].todos.find(todo => todo.id === todoId);
+    if (!currentTodo) return;
+  
+    try {
+      const response = await fetch('/api/update-todo', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: todoId,
+          completed: !currentTodo.completed,
+        }),
+      });
+  
+      const updatedTodo = await response.json();
+  
+      if (!response.ok) {
+        console.error('Error toggling todo completion:', updatedTodo);
+      }
+    } catch (error) {
+      console.error('Error toggling todo completion:', error);
+    }
   };
 
   return (
@@ -107,7 +186,7 @@ const ToDoList: React.FC = () => {
           <h3 className="font-bold text-lg text-blue-200 mb-2">{dayItem.day}</h3>
           <div>
             {dayItem.todos.map((todo, todoIndex) => (
-              <div key={todo.id} className="flex items-center my-3"> {/* Changed from items-start to items-center */}
+              <div key={todo.id} className="flex items-center my-3">
                 <input
                   type="checkbox"
                   checked={todo.completed}
@@ -121,12 +200,14 @@ const ToDoList: React.FC = () => {
                   onBlur={(e) => updateTodo(dayIndex, todo.id, e.currentTarget.textContent || '')}
                   onKeyDown={(e) => handleKeyDown(e, dayIndex, todo.id)}
                   className="editable-div"
-                />
+                >
+                  {todo.text}
+                </div>
               </div>
             ))}
           </div>
           <button
-            onClick={() => addTodo(dayIndex, dayItem.todos.length - 1)}
+            onClick={() => addTodo(dayIndex)}
             className="mt-3 bg-blue-800 hover:bg-blue-700 text-blue-200 font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
             style={{ zIndex: 1000 }}
           >
@@ -138,4 +219,4 @@ const ToDoList: React.FC = () => {
   );
 };
 
-export default ToDoList
+export default ToDoList;
